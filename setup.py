@@ -2,7 +2,7 @@ from setuptools import setup
 from sys import platform
 
 setup(name='git_commit',
-        version='1.0',
+        version='1.01a',
         description='Easily Standardize your github commit automatically!',
         url='https://github.com/jackofspades707/git-commit',
         author='JackofSpades707',
