@@ -5,7 +5,6 @@ This is a simple tool to automatically standardize generic git commits to be eas
 ## todo
 * Allow interactively working with only edited files
 * --dryrun arg
-* --passive isn't implemented I believe (everything is outlined is properly implemented though)
 
 ## symbols
 [+] Added new file to repo
@@ -14,6 +13,7 @@ This is a simple tool to automatically standardize generic git commits to be eas
 
 ## commit message structure
 * $symbol $filename
+* If you're still confused, just check out the commit history for this repo :)
 
 ## args
 ```
