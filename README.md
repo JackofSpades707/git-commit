@@ -1,4 +1,4 @@
-# git-commit.py
+# git_commit.py
 
 * This is a simple tool to automatically standardize generic git commits to be easy to recognize within a repository
 
