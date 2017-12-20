@@ -11,8 +11,9 @@ def parse_args():
     parser.add_argument('-a', '--all', default=False, action='store_true', help='make all avaliable commits for all catagories')
     parser.add_argument('-i', '--include', choices=options + short_opts, help="include actions for provided catagories\nAll Avaliable Catagories below", nargs='*')
     parser.add_argument('-v', '--verbose', default=False, action='store_true', help='display verbose information')
-    parser.add_argument('--noconfirm', default=False, action='store_true', help='no confirmation prompts')
-    parser.add_argument('--passive', default=False, action='store_true', help='Enables passive error handling')
+    parser.add_argument('--interactive', default=False, action='store_true', help='force confirmation prompts')
+    parser.add_argument('-p', '--push', default=False, action='store_true', help='pushes changes to remote repo')
+    parser.add_argument('--passive', default=False, action='store_true', help='Enables passive error handling, displays errors after execution is complete')
     parser.add_argument('files', default=None, nargs='*')
     parser.epilog = catagories_string()
     args = parser.parse_args()
@@ -123,12 +124,12 @@ def commit(filename, index):
         check_output(git.commit("-m {} {}".format(flag, filename)))
 
 def prompt():
-    if args.noconfirm is True:
-        return True
+    if args.interactive is False:
+        return
     prompt = input('These are the files youll be adding & commiting to the repo\nWould you like to proceed? [y/n]\n>_ ').lower()
-    if 'y' in prompt:
-        return True
-    return False
+    if 'y' not in prompt:
+        '[!] You pressed: {}\nexiting...'.format(prompt)
+        raise SystemExit
 
 def display_info(status):
     if args.verbose is True:
@@ -199,6 +200,17 @@ def run(status):
             passive_errors.append(e)
     else:
         _run(status)
+    if args.push is True:
+        git('push')
+    output_passive_errors(passive_errors)
+
+def output_passive_errors(passive_errors):
+    passive_errors = list(set(passive_errors))
+    if passive_errors is None:
+        return
+    print("The following Error(s) were silenced by choosing the --passive flag at runtime")
+    for n, e in enumerate(passive_errors):
+        print('{}: {}'.format(n, e))
 
 def try_wrapper(funct, *args):
     try:
@@ -216,8 +228,8 @@ def Main():
     path = os.getcwd()
     status = parse()
     display_info(status)
-    if prompt() is True:
-        run(status)
+    prompt()
+    run(status)
 
 
 if __name__ == '__main__':
