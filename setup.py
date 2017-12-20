@@ -1,0 +1,13 @@
+from setuptools import setup
+from sys import platform
+
+setup(name='git_commit',
+        version='1.0',
+        description='Easily Standardize your github commit automatically!',
+        url='https://github.com/jackofspades707/git-commit',
+        author='JackofSpades707',
+        author_email='JackofSpades707@hotmail.com',
+        license='MIT',
+        packages=['git_commit'],
+        scripts=['git-commit'],
+        install_requires=['sh', 'argparse'])
