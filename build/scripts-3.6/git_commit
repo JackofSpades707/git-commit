@@ -14,6 +14,7 @@ def parse_args():
     parser.add_argument('--interactive', default=False, action='store_true', help='force confirmation prompts')
     parser.add_argument('-p', '--push', default=False, action='store_true', help='pushes changes to remote repo')
     parser.add_argument('--passive', default=False, action='store_true', help='Enables passive error handling, displays errors after execution is complete')
+    parser.add_argument('-m', '--message', default='', help='Custom message to apply to all commits')
     parser.add_argument('files', default=None, nargs='*')
     parser.epilog = catagories_string()
     args = parser.parse_args()
@@ -121,7 +122,7 @@ def commit(filename, index):
     flag = flags[index]
     if is_valid_opt(option):
         check_output(git.add(filename))
-        check_output(git.commit("-m {} {}".format(flag, filename)))
+        check_output(git.commit("-m {} {} {}".format(flag, filename, args.message)))
 
 def prompt():
     if args.interactive is False:
