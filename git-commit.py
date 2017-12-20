@@ -186,28 +186,22 @@ def max_length(list_of_lists):
                 longest_len = x
     return longest_len
 
-def _run(status):
-    for filename, option in status.items():
-        if is_valid_opt(option) is True:
-            index = options.index(option)
-            commit(filename, index)
+def _run(option, filename):
+    if is_valid_opt(option) is True:
+        index = options.index(option)
+        commit(filename, index)
 
 def run(status):
-    if args.passive is True:
-        passive_errors = []
-        e = try_wrapper(_run, status)
-        if e is not None:
-            passive_errors.append(e)
-    else:
-        _run(status)
-    if args.push is True:
-        git('push')
-    output_passive_errors(passive_errors)
+    for filename, option in status.items():
+        if args.passive is True:
+            try_wrapper(_run, option, filename)
+        else:
+            _run(option, filename)
 
-def output_passive_errors(passive_errors):
-    passive_errors = list(set(passive_errors))
-    if passive_errors is None:
+def output_passive_errors(passive_errors=None):
+    if passive_errors is None or list(set(passive_errors))[0] is None:
         return
+    passive_errors = list(set(passive_errors))
     print("The following Error(s) were silenced by choosing the --passive flag at runtime")
     for n, e in enumerate(passive_errors):
         print('{}: {}'.format(n, e))
@@ -215,12 +209,18 @@ def output_passive_errors(passive_errors):
 def try_wrapper(funct, *args):
     try:
         funct(args)
-        return
     except Exception as e:
-        return e
+        try:
+            passive_errors.append(e)
+        except NameError:
+            passive_errors = [e]
+
+def push():
+    if args.push is True:
+        git('push')
 
 def Main():
-    global options, flags, args, short_opts, valid_opts, path
+    global options, flags, args, short_opts, valid_opts, path, passive_errors
     options, flags = ['modified', 'deleted', 'untracked'], ['[!]', '[-]', '[+]']
     short_opts = ['m', 'd', 'u']
     args = parse_args()
@@ -230,6 +230,8 @@ def Main():
     display_info(status)
     prompt()
     run(status)
+    push()
+    output_passive_errors()
 
 
 if __name__ == '__main__':
