@@ -96,7 +96,7 @@ def parse():
             except IndexError:
                 filename = line
                 option = 'untracked'
-            if file_exists(filename) is True:
+            if file_exists(filename) is True or option == 'deleted':
                 my_dict[filename] = option
         return my_dict
 
