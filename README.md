@@ -2,9 +2,16 @@
 
 * This is a simple tool to automatically standardize generic git commits to be easy to recognize within a repository
 
+## Installation
+`pip install git_commit`
+
 ## todo
-* Allow interactively working with only edited files
+* --todo should parse the repo for any #TODO statements and return then neatly organized displaying the comment & source files full directory : https://github.com/defcube/gitcommit/
+* Remove the use of sh.git and utilize os to keep things more compatible
+* Allow interactively working with only edited files?
 * --dryrun arg
+* It seems not to apply changes to deleted files for some reason, debug & fix this
+* Consider refining this into a class
 
 ## symbols
 * [+] Added new file to repo
