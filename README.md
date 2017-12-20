@@ -1,15 +1,15 @@
 # git-commit.py
 
-This is a simple tool to automatically standardize generic git commits to be easy to recognize within a repository
+* This is a simple tool to automatically standardize generic git commits to be easy to recognize within a repository
 
 ## todo
 * Allow interactively working with only edited files
 * --dryrun arg
 
 ## symbols
-[+] Added new file to repo
-[!] Updated existing file within repo
-[-] removed file from repo
+* [+] Added new file to repo
+* [!] Updated existing file within repo
+* [-] removed file from repo
 
 ## commit message structure
 * $symbol $filename
