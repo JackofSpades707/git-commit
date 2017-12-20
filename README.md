@@ -6,7 +6,8 @@
 `pip install git_commit`
 
 ## todo
-* --todo should parse the repo for any #TODO statements and return then neatly organized displaying the comment & source files full directory : https://github.com/defcube/gitcommit/
+* --todo should parse the repo for any #TODO statements and return then neatly organized displaying the comment & source files full directory 
+* request to take ownership of https://github.com/defcube/gitcommit/ & gitcommit on pypi (currently this is called git_commit as a solution)
 * Remove the use of sh.git and utilize os to keep things more compatible
 * Allow interactively working with only edited files?
 * --dryrun arg
