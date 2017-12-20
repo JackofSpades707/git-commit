@@ -1,0 +1,9 @@
+README.md
+setup.cfg
+setup.py
+git_commit/git_commit
+git_commit.egg-info/PKG-INFO
+git_commit.egg-info/SOURCES.txt
+git_commit.egg-info/dependency_links.txt
+git_commit.egg-info/requires.txt
+git_commit.egg-info/top_level.txt
