@@ -13,6 +13,8 @@
 * It seems not to apply changes to deleted files for some reason, debug & fix this [I believe I fixed this]
 * Consider refining this into a class
 * Refactor code
+* -b --browse should resolve the http url for the repo & open it in prefered browser
+* git push msg should include the repo's http URL
 
 ## symbols
 * [+] Added new file to repo
