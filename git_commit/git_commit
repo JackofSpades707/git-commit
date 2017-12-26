@@ -217,11 +217,7 @@ def try_wrapper(funct, *args):
     try:
         funct(args)
     except Exception as e:
-        try:
-            passive_errors.append(e)
-        except NameError:
-            passive_errors = [e]
-            return passive_errors
+        passive_errors.append(e)
 
 def push():
     if args.push is True:
@@ -235,13 +231,15 @@ def Main():
     global options, flags, args, short_opts, valid_opts, path, passive_errors
     options, flags = ['modified', 'deleted', 'untracked'], ['[!]', '[-]', '[+]']
     short_opts = ['m', 'd', 'u']
+    passive_errors = []
     args = parse_args()
-    valid_opts = validate_opts()
     path = os.getcwd()
-    status = parse()
-    display_info(status)
-    prompt()
-    run(status)
+    if args.include is not None:
+        valid_opts = validate_opts()
+        status = parse()
+        display_info(status)
+        prompt()
+        run(status)
     push()
     output_passive_errors()
 
