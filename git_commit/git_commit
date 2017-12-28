@@ -226,7 +226,7 @@ def push():
         except ErrorReturnCode as e:
             if 'git push --set-upstream origin master' in e.stderr.decode('utf-8'):
                 git('push', '--set-upstream', 'origin', 'master')
-    output("Pushed to repo")
+        output("Pushed to repo")
 
 def Main():
     global options, flags, args, short_opts, valid_opts, path, passive_errors
