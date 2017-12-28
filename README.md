@@ -22,6 +22,7 @@
 * Refactor code
 * -b --browse should resolve the http url for the repo & open it in prefered browser
 * git push msg should include the repo's http URL
+* Port over this functionality to an arg: https://hastebin.com/utefupiyin.bash
 
 ## todo-done
 * Ignores filenames matching $repo/.gitignore
@@ -30,6 +31,7 @@
 * -p | --push pushes commits to repo (and auto handles new repo's requiring --set-upstream origin master)
 * -b | --browse opens repo in webbrowser (requires hub currently)
 * passing filenames directly works now
+* -s | --status outputs $(git status) to stdout
 
 ## symbols
 * [+] Added new file to repo
