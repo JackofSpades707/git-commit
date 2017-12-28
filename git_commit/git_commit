@@ -2,8 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import os
-from sh import git, ErrorReturnCode
+from sh import ErrorReturnCode
 from argparse import ArgumentParser, RawTextHelpFormatter
+
+try:
+    from sh import git
+except ModuleNotFoundError:
+    print("[!] Error: git not installed!")
+    print("Please install git to use this script!")
+    raise SystemExit(1)
+
+try:
+    from sh import hub
+    HUB_INSTALLED = True
+except ModuleNotFoundError:
+    print("[-] Warning: hub not installed")
+    print("-b --browse args will not work without hub")
+    print("hub: a git wrapper to extend git's functionality")
+    HUB_INSTALLED = False    
 
 def parse_args():
     parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
@@ -16,8 +32,9 @@ def parse_args():
     parser.add_argument('-p', '--push', default=False, action='store_true', help='pushes changes to remote repo')
     parser.add_argument('--passive', default=False, action='store_true', help='Enables passive error handling, displays errors after execution is complete')
     parser.add_argument('-m', '--message', default='', help='Custom message to apply to all commits')
+    parser.add_argument('-b', '--browse', action='store_true', default=False, help='Opens repo with preferred webbrowser')
     parser.add_argument('files', default=None, nargs='*')
-    parser.epilog = catagories_string()
+    parser.epilog = epilog_string()
     args = parser.parse_args()
     if args.all is True:
         args.include = options
@@ -62,11 +79,13 @@ def fix_string(s):
 def match_short_opts_and_options(index):
     return options[index], short_opts[index]
 
-def catagories_string():
+def epilog_string():
     s = "Catagories: \n"
     for n, option in enumerate(options):
         short_opt = short_opts[n]
         s = "{}   -{}, --{}\n".format(s, short_opt, option)
+    s = "{}\n".format(s)
+    ""
     return s
 
 def parse():
@@ -114,6 +133,7 @@ def parse():
     return status
 
 def commit(filename, index):
+    # TODO: Check if filename in ~/.gitignore & if so, ignore commiting the file
     def check_output(output):
         if output.exit_code != 0:
             output('[!] Error! Something went wrong')
@@ -228,6 +248,16 @@ def push():
                 git('push', '--set-upstream', 'origin', 'master')
         output("Pushed to repo")
 
+def browse():
+    # TODO: Do all the work that $(hub browse) does here
+    if args.browse is True and HUB_INSTALLED is True:
+        repo_name = identify_repo_name()
+        hub("browse", "{}".format(repo_name))
+
+def identify_repo_name():
+    repo_path = git("rev-parse", "--show-toplevel").stdout.decode('utf-8').strip()
+    return repo_path.split('/')[-1]
+
 def Main():
     global options, flags, args, short_opts, valid_opts, path, passive_errors
     options, flags = ['modified', 'deleted', 'untracked'], ['[!]', '[-]', '[+]']
@@ -242,6 +272,7 @@ def Main():
         prompt()
         run(status)
     push()
+    browse()
     output_passive_errors()
 
 
