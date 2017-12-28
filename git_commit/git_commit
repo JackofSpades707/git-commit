@@ -90,16 +90,16 @@ def epilog_string():
 
 def parse():
 
-    def __is_file(filename, path=os.getcwd()):
+    def is_file(filename, path=os.getcwd()):
         return os.path.isfile("{}/{}".format(path, filename))
 
-    def __is_directory(filename, path=os.getcwd()):
+    def is_directory(filename, path=os.getcwd()):
         return os.path.isdir("{}/{}".format(path, filename))
 
     def file_exists(filename, path=os.getcwd()):
-        return __is_file(filename, path) or __is_directory(filename, path)
+        return is_file(filename, path) or is_directory(filename, path)
 
-    def __has_option(line):
+    def has_option(line):
         x = False
         for option in options:
             if option in line:
@@ -132,33 +132,17 @@ def parse():
     status = trim_non_files_and_parse_to_dict(status)
     return status
 
-def commit(filename, index):
-    # TODO: Check if filename in ~/.gitignore & if so, ignore commiting the file
-    def check_output(output):
-        if output.exit_code != 0:
-            output('[!] Error! Something went wrong')
-            output('cmd: {}'.format(output.ran))
-            try:
-                stderr = output.stderr.decode('utf-8')
-            except AttributeError:
-                stderr = output.stderr
-            output('stderr: {}'.format(stderr))
-            raise SystemExit
-    option = options[index]
-    flag = flags[index]
-    if is_valid_opt(option):
-        check_output(git.add(filename))
-        check_output(git.commit("-m {} {} {}".format(flag, filename, args.message)))
-
-def prompt():
+def prompt(filename):
     if args.interactive is False:
-        return
-    prompt = input('These are the files youll be adding & commiting to the repo\nWould you like to proceed? [y/n]\n>_ ').lower()
+        return True
+    prompt = input('Proceed processing {}? [y/n]\n>_ '.format(filename)).lower()
     if 'y' not in prompt:
-        '[!] You pressed: {}\nexiting...'.format(prompt)
-        raise SystemExit
+        return False
+    return True
 
 def display_info(status):
+    def build_array(status):
+        return [i for i in list(status.keys())]
     if args.verbose is True:
         import pprint
         output('Verbose Info:')
@@ -188,9 +172,6 @@ def pretty_string(s, max_len, min_spaces=4):
     while s[-4:] != ' ' * min_spaces:
         s = '{} '.format(s)
     return s
-
-def build_array(status):
-    return [i for i in list(status.keys())]
 
 def max_length(list_of_lists):
     '''
@@ -239,6 +220,32 @@ def try_wrapper(funct, *args):
     except Exception as e:
         passive_errors.append(e)
 
+def is_ignored_file(filename):
+    with open("{}/{}".format(get_repo_path(), '.gitignore')) as f:
+        lines = f.readlines()
+    for line in lines:
+        if filename in line:
+            return True
+    return False
+
+def commit(filename, index):
+    def check_output(output):
+        if output.exit_code != 0:
+            output('[!] Error! Something went wrong')
+            output('cmd: {}'.format(output.ran))
+            try:
+                stderr = output.stderr.decode('utf-8')
+            except AttributeError:
+                stderr = output.stderr
+            output('stderr: {}'.format(stderr))
+            raise SystemExit
+    option = options[index]
+    flag = flags[index]
+    if is_valid_opt(option) is True and is_ignored_file(filename) is False:
+        if prompt(filename) is True:
+            check_output(git.add(filename))
+            check_output(git.commit("-m {} {} {}".format(flag, filename, args.message)))
+
 def push():
     if args.push is True:
         try:
@@ -251,13 +258,16 @@ def push():
 def browse():
     # TODO: Do all the work that $(hub browse) does here
     if args.browse is True and HUB_INSTALLED is True:
-        repo_name = identify_repo_name()
+        repo_name = get_repo_name()
         hub("browse", "{}".format(repo_name))
 
-def identify_repo_name():
-    repo_path = git("rev-parse", "--show-toplevel").stdout.decode('utf-8').strip()
+def get_repo_name():
+    repo_path = get_repo_path()
     return repo_path.split('/')[-1]
 
+def get_repo_path():
+    return git("rev-parse", "--show-toplevel").stdout.decode('utf-8').strip()
+ 
 def Main():
     global options, flags, args, short_opts, valid_opts, path, passive_errors
     options, flags = ['modified', 'deleted', 'untracked'], ['[!]', '[-]', '[+]']
@@ -269,7 +279,6 @@ def Main():
         valid_opts = validate_opts()
         status = parse()
         display_info(status)
-        prompt()
         run(status)
     push()
     browse()
