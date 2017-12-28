@@ -25,15 +25,16 @@ def parse_args():
     parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
     parser.description = "This tool will incrementally add & commit changes to a repository, the args are used as triggers for various settings"
     parser.add_argument('-a', '--all', default=False, action='store_true', help='make all avaliable commits for all catagories')
-    parser.add_argument('-i', '--include', default=[], choices=options + short_opts, help="include actions for provided catagories\nAll Avaliable Catagories below", nargs='*')
-    parser.add_argument('-v', '--verbose', default=False, action='store_true', help='display verbose information')
-    parser.add_argument('-q', '--quiet', default=False, action='store_true', help='Quiet mode, Disables output')
-    parser.add_argument('--interactive', default=False, action='store_true', help='force confirmation prompts')
-    parser.add_argument('-p', '--push', default=False, action='store_true', help='pushes changes to remote repo')
-    parser.add_argument('--passive', default=False, action='store_true', help='Enables passive error handling, displays errors after execution is complete')
-    parser.add_argument('-m', '--message', default='', help='Custom message to apply to all commits')
     parser.add_argument('-b', '--browse', action='store_true', default=False, help='Opens repo with preferred webbrowser')
     parser.add_argument('-d', '--debug', action='store_true', default=False, help='Displays debug information to make editing src easier')
+    parser.add_argument('-i', '--include', default=[], choices=options + short_opts, help="include actions for provided catagories\nAll Avaliable Catagories below", nargs='*')
+    parser.add_argument('-m', '--message', default='', help='Custom message to apply to all commits')
+    parser.add_argument('-p', '--push', default=False, action='store_true', help='pushes changes to remote repo')
+    parser.add_argument('-q', '--quiet', default=False, action='store_true', help='Quiet mode, Disables output')
+    parser.add_argument('-s', '--status', default=False, action='store_true', help="Displays git status and exits")
+    parser.add_argument('-v', '--verbose', default=False, action='store_true', help='display verbose information')
+    parser.add_argument('--interactive', default=False, action='store_true', help='force confirmation prompts')
+    parser.add_argument('--passive', default=False, action='store_true', help='Enables passive error handling, displays errors after execution is complete')
     parser.add_argument('files', default=[], nargs='*')
     parser.epilog = epilog_string()
     args = parser.parse_args()
@@ -271,6 +272,11 @@ def browse():
         repo_name = get_repo_name()
         hub("browse", "{}".format(repo_name))
 
+def git_status():
+    if args.status is True:
+        output(git('status'))
+        raise SystemExit(0)
+
 def get_repo_name():
     repo_path = get_repo_path()
     return repo_path.split('/')[-1]
@@ -299,6 +305,7 @@ def Main():
         run(status, mode='file')
     push()
     browse()
+    git_status()
     output_passive_errors()
 
 
