@@ -224,8 +224,11 @@ def run(status, mode='bulk'):
     output(debug_msg="Leaving run(status, mode={})".format(mode))
 
 def is_ignored_file(filename):
-    with open("{}/{}".format(get_repo_path(), '.gitignore')) as f:
-        lines = f.readlines()
+    try:
+        with open("{}/{}".format(get_repo_path(), '.gitignore')) as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        return False
     for line in lines:
         if filename in line:
             return True
@@ -253,7 +256,8 @@ def commit(filename, index, mode='bulk'):
         if prompt(filename) is True:
             make_commit(filename, flag)
     elif mode == 'file' and is_ignored_file(filename) is False:
-        make_commit(filename, flag)
+        if prompt(filename) is True:
+            make_commit(filename, flag)
     output(debug_msg="Leaving commit(filename, index, mode)")
 
 def push():
