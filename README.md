@@ -5,6 +5,13 @@
 ## Installation
 `pip install git_commit`
 
+## Dependencies
+* python-sh
+* git
+* python-argparse
+* python3 (python2 not currently supported)
+* hub (optional for -b flag)
+
 ## todo
 * --todo should parse the repo for any #TODO statements and return then neatly organized displaying the comment & source files full directory 
 * request to take ownership of https://github.com/defcube/gitcommit/ & gitcommit on pypi (currently this is called git_commit as a solution)
