@@ -22,6 +22,14 @@
 * Refactor code
 * -b --browse should resolve the http url for the repo & open it in prefered browser
 * git push msg should include the repo's http URL
+* args.files should be added to args.include
+
+## todo-done
+* Ignores filenames matching $repo/.gitignore
+* --interactive prompts between every commit
+* output is pretty
+* -p | --push pushes commits to repo (and auto handles new repo's requiring --set-upstream origin master)
+* -b | --browse opens repo in webbrowser (requires hub currently)
 
 ## symbols
 * [+] Added new file to repo
