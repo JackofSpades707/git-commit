@@ -237,11 +237,13 @@ def commit(filename, index, mode='bulk'):
             try:
                 git.add(filename)
                 git.commit("-m {} {} {}".format(flag, filename, args.message))
+                output("{} {} {}".format(flag, filename, args.message))
             except Exception as err:
                 passive_errors.append("{}|{}".format(filename, err))
         else:
             git.add(filename)
             git.commit("-m {} {} {}".format(flag, filename, args.message))
+            output("{} {} {}".format(flag, filename, args.message))
         output(debug_msg="Leaving make_commit(filename, flag)")
     output(debug_msg="Entered commit(filename={}, index={}, mode={})".format(filename, index, mode))
     option = options[index]
