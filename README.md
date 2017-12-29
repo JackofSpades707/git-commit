@@ -52,11 +52,18 @@ Examples:
 
 >_ git-commit.py -p
 pushed to repo
+
+>_ git-commit.py SomeModifiedFile SomeNewFile -p
+[!] SomeModifiedFile
+[+] SomeNewFile
+pushed to repo
 ```
 ```
-usage: git-commit.py [-h] [-a]
+
+usage: git-commit.py [-h] [-a] [-b] [-d]
                      [-i [{modified,deleted,untracked,m,d,u} [{modified,deleted,untracked,m,d,u} ...]]]
-                     [-v] [-q] [--interactive] [-p] [--passive] [-m MESSAGE]
+                     [-m MESSAGE] [-p] [-q] [-s] [-v] [--interactive]
+                     [--passive]
                      [files [files ...]]
 
 This tool will incrementally add & commit changes to a repository, the args are used as triggers for various settings
@@ -67,16 +74,19 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -a, --all             make all avaliable commits for all catagories
+  -b, --browse          Opens repo with preferred webbrowser
+  -d, --debug           Displays debug information to make editing src easier
   -i [{modified,deleted,untracked,m,d,u} [{modified,deleted,untracked,m,d,u} ...]], --include [{modified,deleted,untracked,m,d,u} [{modified,deleted,untracked,m,d,u} ...]]
                         include actions for provided catagories
                         All Avaliable Catagories below
-  -v, --verbose         display verbose information
-  -q, --quiet           Quiet mode, Disables output
-  --interactive         force confirmation prompts
-  -p, --push            pushes changes to remote repo
-  --passive             Enables passive error handling, displays errors after execution is complete
   -m MESSAGE, --message MESSAGE
                         Custom message to apply to all commits
+  -p, --push            pushes changes to remote repo
+  -q, --quiet           Quiet mode, Disables output
+  -s, --status          Displays git status and exits
+  -v, --verbose         display verbose information
+  --interactive         force confirmation prompts
+  --passive             Enables passive error handling, displays errors after execution is complete
 
 Catagories: 
    -m, --modified
