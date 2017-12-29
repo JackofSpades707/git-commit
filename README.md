@@ -14,7 +14,7 @@
 
 ## todo
 * --todo should parse the repo for any #TODO statements and return then neatly organized displaying the comment & source files full directory 
-* request to take ownership of https://github.com/defcube/gitcommit/ & gitcommit on pypi (currently this is called git_commit as a solution)
+* request to take ownership of https://github.com/defcube/gitcommit/ & gitcommit on pypi (currently this is called git_commit as a solution) (I Have been granted permission to take ownership of gitcommit on pypi, I will do so once I port over all the functionality of that package into this package)
 * Remove the use of sh.git and utilize os to keep things more compatible
 * --dryrun arg
 * It seems not to apply changes to deleted files for some reason, debug & fix this [I believe I fixed this]
