@@ -5,6 +5,10 @@
 ## Installation
 `pip install git_commit`
 
+## Suggestion
+* I highly suggest doing something like the following in your ~/.bashrc or ~/.zshrc:
+`alias GC=/usr/bin/git_commit`
+
 ## Dependencies
 * python-sh
 * git
