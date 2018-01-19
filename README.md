@@ -17,18 +17,20 @@
 * hub (optional for -b flag)
 
 ## todo
-* --todo should parse the repo for any #TODO statements and return then neatly organized displaying the comment & source files full directory 
+* --todo should parse the repo for any #TODO statements and return then neatly organized displaying the comment & source files full directory
 * request to take ownership of https://github.com/defcube/gitcommit/ & gitcommit on pypi (currently this is called git_commit as a solution) (I Have been granted permission to take ownership of gitcommit on pypi, I will do so once I port over all the functionality of that package into this package)
-* Remove the use of sh.git and utilize os to keep things more compatible
-* --dryrun arg
-* It seems not to apply changes to deleted files for some reason, debug & fix this [I believe I fixed this]
-* Consider refining this into a class
-* Refactor code
-* -b --browse should resolve the http url for the repo & open it in prefered browser
-* git push msg should include the repo's http URL
+* --dryrun) doesn't execute anything, outputs everything
+* -b) shouldn't rely on using $(hub)
+* I should switch this over to use githubs API if possible or at the least the subprocess module
+* Refactor code (and convert this into a class, globals are gross)
 * Port over this functionality to an arg: https://hastebin.com/utefupiyin.bash
+* Tab completion with bash/zsh/xonsh
+* -rm | --remove) should remove the item from the repo's entire history (This will likely backup the entire repository when first implemented)
+* --pull) self explanitory
 
 ## todo-done
+* -c --clone argument for cloning a repository
+* -b --browse should resolve the http url for the repo & open it in prefered browser
 * Ignores filenames matching $repo/.gitignore
 * --interactive prompts between every commit
 * output is pretty
