@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# TODO: Refactor Code
+
 import os
 from sh import ErrorReturnCode
 from argparse import ArgumentParser, RawTextHelpFormatter
@@ -26,6 +28,7 @@ def parse_args():
     parser.description = "This tool will incrementally add & commit changes to a repository, the args are used as triggers for various settings"
     parser.add_argument('-a', '--all', default=False, action='store_true', help='make all avaliable commits for all catagories')
     parser.add_argument('-b', '--browse', action='store_true', default=False, help='Opens repo with preferred webbrowser')
+    parser.add_argument('-c', '--clone', nargs='*', default=None, help='clone a git repo')
     parser.add_argument('-d', '--debug', action='store_true', default=False, help='Displays debug information to make editing src easier')
     parser.add_argument('-i', '--include', default=[], choices=options + short_opts, help="include actions for provided catagories\nAll Avaliable Catagories below", nargs='*')
     parser.add_argument('-m', '--message', default='', help='Custom message to apply to all commits')
@@ -275,6 +278,10 @@ def browse():
     if args.browse is True and HUB_INSTALLED is True:
         repo_name = get_repo_name()
         hub("browse", "{}".format(repo_name))
+
+def clone():
+    if args.clone is not None:
+        git('clone', *args.clone)
 
 def git_status():
     if args.status is True:
